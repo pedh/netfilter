@@ -7,7 +7,11 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/mdlayher/netlink"
-	"golang.org/x/sys/unix"
+)
+
+const (
+	// Copied from "golang.org/x/sys/unix", to avoid compile error on non-linux system
+	NetlinkNetfilter = 0xc
 )
 
 // Conn represents a Netlink connection to the Netfilter subsystem.
@@ -28,7 +32,7 @@ func Dial(config *netlink.Config) (*Conn, error) {
 	var c Conn
 	var err error
 
-	c.conn, err = netlink.Dial(unix.NETLINK_NETFILTER, config)
+	c.conn, err = netlink.Dial(NetlinkNetfilter, config)
 	if err != nil {
 		return nil, err
 	}
